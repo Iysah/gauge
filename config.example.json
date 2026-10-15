@@ -1,0 +1,14 @@
+{
+  "routerHost": "192.168.0.1",
+  "username": "admin",
+  "planGb": 350,
+  "warnPercent": 80,
+  "dailyLimitGb": 15,
+  "notifyNewDevice": true,
+  "notifyOffline": true,
+  "showMenuBar": true,
+  "openAtLogin": false,
+  "pollSeconds": 30,
+  "gbBase": 1024,
+  "deviceNicknames": {}
+}

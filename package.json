@@ -1,0 +1,26 @@
+{
+  "name": "tally",
+  "productName": "Tally",
+  "version": "2.0.0",
+  "description": "Tally: Mac application for tracking 5G router data usage and connected devices.",
+  "main": "src/main.js",
+  "type": "module",
+  "scripts": {
+    "start": "electron .",
+    "test": "node --test test/**/*.test.js",
+    "build:mac": "electron-packager . 'Tally' --platform=darwin --arch=x64 --out=dist --icon=assets/icon.icns --overwrite --app-bundle-id=com.tally.app --prune=true"
+  },
+  "keywords": [
+    "tally",
+    "5g",
+    "router",
+    "data-monitor",
+    "macos"
+  ],
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "@electron/packager": "^20.3.0",
+    "electron": "^44.7.2"
+  }
+}

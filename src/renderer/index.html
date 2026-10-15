@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Tally</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="window logged-out" id="appWindow">
+  <!-- SIDEBAR (Shown only when logged in) -->
+  <nav class="side" id="appSidebar" aria-label="Sections">
+    <!-- Transparent drag spacer for macOS native traffic lights -->
+    <div class="lights-spacer" aria-hidden="true"></div>
+    <div class="side-brand">
+      <img src="../../assets/tally-logo.png" alt="Tally" class="side-brand-icon">
+      <span class="side-brand-title">Tally</span>
+    </div>
+    <button data-go="dash" aria-current="true">
+      <svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 3v18h18"/><path d="M8 17v-5"/><path d="M13 17V8"/><path d="M18 17v-9"/></svg>Usage
+    </button>
+    <button data-go="devices">
+      <svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="12" rx="2"/><path d="M2 20h20"/></svg>Devices
+    </button>
+    <button data-go="settings">
+      <svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6h10"/><path d="M18 6h2"/><circle cx="16" cy="6" r="2"/><path d="M4 12h2"/><path d="M10 12h10"/><circle cx="8" cy="12" r="2"/><path d="M4 18h12"/><circle cx="18" cy="18" r="2"/></svg>Settings
+    </button>
+    <div class="sp"></div>
+    <div class="status" id="sidebarStatus">
+      <span class="dot off" id="sdot"></span>
+      <span id="stext">Connecting…</span>
+    </div>
+  </nav>
+
+  <!-- MAIN CONTENT AREA -->
+  <main id="appMain">
+    <!-- CONNECT / LOGIN SCREEN (Full window on initial launch) -->
+    <section class="screen on" id="connect">
+      <!-- Drag area for window movement and traffic lights -->
+      <div class="top-drag-bar" aria-hidden="true"></div>
+      <div class="cwrap">
+        <div>
+          <div class="ccard">
+            <header>
+              <img src="../../assets/tally-logo.png" alt="Tally" class="connect-logo-img">
+              <b>Connect to your 5G router</b>
+              <small id="routerModelName">ZLT X17U</small>
+            </header>
+            <form id="cform">
+              <label for="cRouterIp">Router address</label>
+              <input type="text" id="cRouterIp" value="192.168.0.1" required>
+              <label for="cRouterPass">Router password</label>
+              <input type="password" id="cRouterPass" placeholder="Password" value="admin" required>
+              <label class="chk">
+                <input type="checkbox" id="cSaveKey" checked> Save password in Keychain
+              </label>
+              <div class="err" id="cErr" role="alert"></div>
+              <button class="btn" type="submit" id="btnConnectSubmit">Connect</button>
+            </form>
+          </div>
+          <p class="cfoot">Your password stays securely on this Mac.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- USAGE / DASHBOARD SCREEN -->
+    <section class="screen" id="dash">
+      <header class="topbar">
+        <div>
+          <div class="eyebrow">Your connection at a glance</div>
+          <h1 id="pageTitle">Usage overview</h1>
+        </div>
+        <div class="top-actions">
+          <div class="period-pills" role="tablist" aria-label="Usage period">
+            <button class="active" data-period="month">This month</button>
+            <button data-period="week">7 days</button>
+            <button data-period="today">Today</button>
+          </div>
+          <button class="icon-btn" id="btnRefreshUsage" title="Refresh usage" aria-label="Refresh usage">
+            <svg class="ic" viewBox="0 0 24 24"><path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"/></svg>
+          </button>
+        </div>
+      </header>
+
+      <div class="dash-content">
+        <!-- Hero Section -->
+        <div class="hero">
+          <div class="hero-main">
+            <div class="hero-lbl" id="heroPeriodLabel">October usage so far</div>
+            <div class="num big"><span id="usedTotal">0.0</span><small id="usedUnit">GB</small></div>
+            <div class="hero-caption" id="heroCaptionText">Total data used this month</div>
+            <div class="split"><i id="splitBar" style="width:50%"></i></div>
+            <div class="leg">
+              <span><i class="legend-dot" style="background:#171713"></i>Download <b id="legDown">0 GB</b></span>
+              <span><i class="legend-dot" style="background:#5b8def"></i>Upload <b id="legUp">0 GB</b></span>
+            </div>
+          </div>
+          <div class="hero-plan" id="planBox">
+            <div class="hero-plan-header">
+              <span class="hero-plan-tag">Monthly Plan</span>
+              <b id="planRemaining">350 GB left</b>
+            </div>
+            <div class="plan-prog">
+              <i id="planProgBar" style="width:0%"></i>
+            </div>
+            <div class="hero-plan-sub">
+              <span id="planPercentText">0% used</span>
+              <span class="hero-plan-badge" id="heroNetworkBadge">5G Online</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- 4 Key Metrics Cards -->
+        <div class="metrics">
+          <div class="metric">
+            <div class="metric-top">Current speed <span class="metric-icon"><svg viewBox="0 0 24 24" class="ic"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg></span></div>
+            <div class="metric-value"><span id="statSpeedDown">0</span> <small style="font-size:12px;color:var(--mute)">↓</small> / <span id="statSpeedUp">0</span> <small style="font-size:12px;color:var(--mute)">↑</small> <small id="speedUnit" style="font-size:12px">kb/s</small></div>
+            <div class="metric-foot">Live download / upload</div>
+          </div>
+          <div class="metric">
+            <div class="metric-top">Used today <span class="metric-icon"><svg viewBox="0 0 24 24" class="ic"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></span></div>
+            <div class="metric-value" id="statToday">0 GB</div>
+            <div class="metric-foot">Today's total usage</div>
+          </div>
+          <div class="metric">
+            <div class="metric-top">Last 7 days <span class="metric-icon"><svg viewBox="0 0 24 24" class="ic"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></span></div>
+            <div class="metric-value" id="statWeek">0 GB</div>
+            <div class="metric-foot">Across all connected devices</div>
+          </div>
+          <div class="metric">
+            <div class="metric-top">Monthly average <span class="metric-icon"><svg viewBox="0 0 24 24" class="ic"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg></span></div>
+            <div class="metric-value" id="statAvg">0 GB</div>
+            <div class="metric-foot">Per active month</div>
+          </div>
+        </div>
+
+        <!-- 2-Column Content Grid: Usage Over Time Chart + Monthly Distribution Donut -->
+        <div class="content-grid">
+          <!-- Panel 1: Usage Over Time -->
+          <article class="panel">
+            <div class="panel-heading">
+              <div>
+                <h2>Usage over time</h2>
+                <div class="panel-sub" id="chartSubtitle">Daily data consumption · October 2026</div>
+              </div>
+              <div class="chart-select-wrap">
+                <select class="chart-dropdown" id="chartPeriodSelect" aria-label="Select chart timeframe">
+                  <option value="daily">Daily</option>
+                  <option value="hourly">Hourly</option>
+                </select>
+              </div>
+            </div>
+            <div class="chart-legend">
+              <span class="legend-dot-item"><i class="swatch-circle" style="background:var(--ink)"></i>Download</span>
+              <span class="legend-dot-item"><i class="swatch-circle" style="background:#4a85f6"></i>Upload</span>
+            </div>
+            <div class="chart-container" id="lineChartContainer">
+              <svg class="line-chart-svg" id="lineChartSvg" viewBox="0 0 620 220" preserveAspectRatio="none">
+                <defs>
+                  <linearGradient id="limeAreaGrad" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0%" stop-color="#D4F070" stop-opacity="0.5" />
+                    <stop offset="100%" stop-color="#D4F070" stop-opacity="0.08" />
+                  </linearGradient>
+                </defs>
+              </svg>
+              <div class="chart-tooltip" id="chartTooltip" style="display:none"></div>
+            </div>
+            <div class="chart-summary">
+              <div>
+                <div class="summary-label">Peak usage day</div>
+                <div class="summary-value" id="summaryPeakDay">—</div>
+              </div>
+              <div>
+                <div class="summary-label">Daily average</div>
+                <div class="summary-value" id="summaryDailyAvg">—</div>
+              </div>
+              <div>
+                <div class="summary-label">Upload share</div>
+                <div class="summary-value" id="summaryUpShare">—</div>
+              </div>
+            </div>
+          </article>
+
+          <!-- Panel 2: Monthly Share & Distribution Donut -->
+          <article class="panel">
+            <div class="panel-heading">
+              <div>
+                <h2>Monthly distribution</h2>
+                <div class="panel-sub">Share of all-time traffic</div>
+              </div>
+              <div class="panel-badge" id="atCountBadge">1 Month</div>
+            </div>
+            <div class="donut-wrapper">
+              <svg class="donut-svg" id="pieSvg" viewBox="0 0 200 200"></svg>
+              <div class="donut-center">
+                <span class="donut-center-sub" id="pieCenterLabel">All-Time</span>
+                <b class="donut-center-val num" id="pieCenterVal">0 GB</b>
+                <small class="donut-center-note" id="pieCenterNote">Total tracked</small>
+              </div>
+            </div>
+            <div class="pie-legend-list" id="pieLegendList">
+              <!-- Dynamically populated -->
+            </div>
+          </article>
+        </div>
+
+        <!-- Bottom Grid: Monthly History + Router Connection Status -->
+        <div class="bottom-grid">
+          <!-- Monthly History List -->
+          <article class="panel">
+            <div class="panel-heading">
+              <div>
+                <h2>Monthly history</h2>
+                <div class="panel-sub">Compare your records month by month</div>
+              </div>
+              <button class="btn-ghost-sm" id="btnExportCsv">Export CSV ↓</button>
+            </div>
+            <div class="history-list" id="monthlyHistoryList">
+              <!-- Dynamically populated -->
+            </div>
+          </article>
+
+          <!-- Router Connection Status -->
+          <article class="panel">
+            <div class="panel-heading">
+              <div>
+                <h2>Connection status</h2>
+                <div class="panel-sub">Live router metrics</div>
+              </div>
+              <span class="status-pill" id="connStatusPill">Connected</span>
+            </div>
+            <div class="status-rows">
+              <div class="status-row">
+                <span class="status-lbl">Router model</span>
+                <strong id="connRouterModel">5G Router (ZLT X17U)</strong>
+              </div>
+              <div class="status-row">
+                <span class="status-lbl">Network</span>
+                <strong id="connNetworkType">5G (NSA)</strong>
+              </div>
+              <div class="status-row">
+                <div class="status-row-top">
+                  <span class="status-lbl">Signal strength</span>
+                  <strong id="connSignalText">Good · -46 dBm</strong>
+                </div>
+                <div class="status-track">
+                  <div class="status-fill" id="connSignalFill" style="width:75%"></div>
+                </div>
+              </div>
+              <div class="status-row">
+                <span class="status-lbl">Local address</span>
+                <strong id="connLocalIp">192.168.0.114 (this Mac)</strong>
+              </div>
+              <div class="status-row">
+                <span class="status-lbl">Last synced</span>
+                <strong id="connLastSync">Just now</strong>
+              </div>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- DEVICES SCREEN -->
+    <section class="screen" id="devices">
+      <div class="bar">
+        <div>
+          <h2>Devices</h2>
+          <span>Everything the router has given an address to</span>
+        </div>
+        <div class="bar-actions">
+          <button class="btn ghost" id="btnRefreshDevices" style="padding:4px 12px;font-size:11.5px">Refresh</button>
+        </div>
+      </div>
+      <div class="pad">
+        <table>
+          <thead>
+            <tr>
+              <th>Device</th>
+              <th>Connection</th>
+              <th>Used today</th>
+              <th>Used this month</th>
+            </tr>
+          </thead>
+          <tbody id="devicesTableBody">
+            <tr>
+              <td colspan="4" style="text-align:center;color:var(--mute);padding:24px">Loading connected devices…</td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="callout" id="devicesCallout">
+          <b>How device usage is measured:</b> This router firmware doesn't track bytes per individual phone or client device, so only <b>this Mac</b> is measured directly via its own macOS network interface. <b>“All other devices together”</b> represents the router’s total usage minus this Mac. Monthly figures count from when the monitor started.
+        </div>
+      </div>
+    </section>
+
+
+    <!-- SETTINGS SCREEN -->
+    <section class="screen" id="settings">
+      <div class="bar">
+        <h2>Settings</h2>
+        <span>Saved on this Mac</span>
+      </div>
+      <div class="pad">
+        <div class="row">
+          <div>
+            <b>Router address</b>
+            <p>Usually 192.168.0.1</p>
+          </div>
+          <input type="text" id="sRouterHost" value="192.168.0.1" aria-label="Router address">
+        </div>
+        <div class="row">
+          <div>
+            <b>Monthly plan size</b>
+            <p>Used for the bundle progress bar and threshold alerts (e.g. 350 GB)</p>
+          </div>
+          <input type="text" id="sPlanGb" value="350 GB" aria-label="Monthly plan size">
+        </div>
+        <div class="row">
+          <div>
+            <b>Warn me at</b>
+            <p>Sends a native macOS notification once per month</p>
+          </div>
+          <select id="sWarnPercent" aria-label="Warn at">
+            <option value="70">70% of plan</option>
+            <option value="80" selected>80% of plan</option>
+            <option value="90">90% of plan</option>
+          </select>
+        </div>
+        <div class="row">
+          <div>
+            <b>Daily usage limit</b>
+            <p>Sends a notification when day usage passes this amount (e.g. 15 GB)</p>
+          </div>
+          <input type="text" id="sDailyLimitGb" value="15 GB" aria-label="Daily usage limit">
+        </div>
+        <div class="row">
+          <div>
+            <b>Alert on new devices</b>
+            <p>Notifies when a new phone, laptop, or device connects to the router</p>
+          </div>
+          <input class="sw" type="checkbox" id="sNotifyNewDevice" checked aria-label="Alert on new devices">
+        </div>
+        <div class="row">
+          <div>
+            <b>Alert when router goes offline</b>
+            <p>Notifies if connection to router is dropped or unreachable</p>
+          </div>
+          <input class="sw" type="checkbox" id="sNotifyOffline" checked aria-label="Alert when router goes offline">
+        </div>
+        <div class="row">
+          <div>
+            <b>Show usage in menu bar</b>
+            <p>Displays total used this month in the macOS status bar</p>
+          </div>
+          <input class="sw" type="checkbox" id="sShowMenuBar" checked aria-label="Show in menu bar">
+        </div>
+        <div class="row">
+          <div>
+            <b>Open at login</b>
+            <p>Keeps monitoring quietly in the background</p>
+          </div>
+          <input class="sw" type="checkbox" id="sOpenAtLogin" aria-label="Open at login">
+        </div>
+
+        <div class="row">
+          <div>
+            <b>Appearance</b>
+            <p>Follows macOS system settings by default</p>
+          </div>
+          <select id="sTheme" aria-label="Appearance">
+            <option value="auto">Match system</option>
+            <option value="light">Light</option>
+            <option value="dark">Dark</option>
+          </select>
+        </div>
+        <div class="row" style="border:0">
+          <div>
+            <b>Router connection</b>
+            <p>Disconnect to change router login or password</p>
+          </div>
+          <button class="btn ghost" id="btnDisconnect">Disconnect</button>
+        </div>
+
+        <div class="callout" style="margin-top:24px">
+          <b>Trust &amp; Security:</b>
+          <p style="margin:6px 0 0;line-height:1.6">
+            • <b>macOS Keychain:</b> Router passwords are encrypted via Electron’s safeStorage directly in your macOS Keychain and never stored in plain text.<br>
+            • <b>Lockout Protection:</b> The router firmware locks logins for several minutes after 3 consecutive wrong passwords. Tally automatically stops polling upon a single rejected login to keep your router accessible.
+          </p>
+        </div>
+      </div>
+    </section>
+  </main>
+</div>
+
+<!-- DEVICE NICKNAME MODAL -->
+<div class="modal-backdrop" id="nicknameModal" style="display:none">
+  <div class="modal-card">
+    <h3 style="margin:0 0 6px;font-family:var(--font-heading);font-size:16px">Rename Device</h3>
+    <p id="nicknameModalSub" style="margin:0 0 14px;color:var(--mute);font-size:12px">Set a custom nickname</p>
+    <input type="text" id="nicknameInput" placeholder="e.g. Living Room TV or Jerry's iPhone" class="modal-input" maxlength="40">
+    <div class="modal-actions">
+      <button class="btn ghost" id="btnResetNickname" style="font-size:11px">Reset</button>
+      <div style="flex:1"></div>
+      <button class="btn ghost" id="btnCancelNickname">Cancel</button>
+      <button class="btn primary" id="btnSaveNickname">Save</button>
+    </div>
+  </div>
+</div>
+
+<script src="app.js"></script>
+</body>
+</html>

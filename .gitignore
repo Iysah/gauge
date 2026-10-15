@@ -1,0 +1,19 @@
+# Dependencies
+node_modules/
+
+# Production & Packaging Builds
+dist/
+Tally.app/
+*.dmg
+*.zip
+
+# Local User Data & Sensitive Configurations
+config.json
+usage.jsonl
+*.log
+
+# System & Editor Files
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/

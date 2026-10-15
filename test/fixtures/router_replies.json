@@ -1,0 +1,107 @@
+{
+  "cmd_104": { "success": true, "message": "" },
+  "cmd_80": {
+    "success": true,
+    "imei": "860000000000000",
+    "imsi": "421000000000000",
+    "hardware_version": "ZLT_X17U_V1.0",
+    "software_version": "V2.0.1_MOCK",
+    "wafer_id": "MOCK_WAFER_001"
+  },
+  "cmd_232": {
+    "success": true,
+    "token": "a1b2c3d4e5f60718293a4b5c6d7e8f90"
+  },
+  "cmd_100_success": {
+    "success": true,
+    "sessionId": "mock_session_id_abcdef0123456789",
+    "login_fail": "success",
+    "isCheckPasswd": "1"
+  },
+  "cmd_100_fail": {
+    "success": false,
+    "login_fail": "fail",
+    "message": "Wrong password"
+  },
+  "cmd_337": {
+    "success": true,
+    "dl_mon_flow": 131700,
+    "ul_mon_flow": 100800,
+    "mon_download_flow": 232500
+  },
+  "cmd_133": {
+    "success": true,
+    "wan_rx_bytes": 138099589120,
+    "wan_tx_bytes": 105696460800,
+    "uptime": 864000
+  },
+  "cmd_402": {
+    "success": true,
+    "dl_flow_rate": 35840,
+    "ul_flow_rate": 4096,
+    "dhcp_list_info": [
+      {
+        "hostname": "MacBook-Pro",
+        "ip": "192.168.0.114",
+        "mac": "02:00:00:00:00:01",
+        "interface": "wlan",
+        "flow": "0"
+      },
+      {
+        "hostname": "iPhone",
+        "ip": "192.168.0.120",
+        "mac": "02:00:00:00:00:02",
+        "interface": "wlan",
+        "flow": "0"
+      },
+      {
+        "hostname": "Smart-TV",
+        "ip": "192.168.0.130",
+        "mac": "02:00:00:00:00:03",
+        "interface": "eth",
+        "flow": "0"
+      }
+    ]
+  },
+  "cmd_225": {
+    "success": true,
+    "wlan5g_wifi_info": [
+      {
+        "mac": "02:00:00:00:00:01",
+        "rssi": -42,
+        "txrate": 866,
+        "rxrate": 866
+      },
+      {
+        "mac": "02:00:00:00:00:02",
+        "rssi": -55,
+        "txrate": 433,
+        "rxrate": 433
+      }
+    ]
+  },
+  "cmd_224": {
+    "success": true,
+    "wlan24g_wifi_info": [
+      {
+        "mac": "02:00:00:00:00:03",
+        "rssi": -65,
+        "txrate": 144,
+        "rxrate": 144
+      }
+    ]
+  },
+  "cmd_205": {
+    "success": true,
+    "network_type_str": "5G (NSA)",
+    "network_operator": "Cellular",
+    "signal_lvl": 4,
+    "RSRP": -46,
+    "RSRP_5G": -48
+  },
+  "cmd_113": {
+    "success": true,
+    "board_type": "ZLT X17U",
+    "software_version": "V2.0.1_MOCK"
+  }
+}
