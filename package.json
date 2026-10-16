@@ -11,7 +11,8 @@
     "test": "node --test test/**/*.test.js",
     "build:mac": "electron-packager . 'Gauge' --platform=darwin --arch=x64 --out=dist --icon=assets/icon.icns --overwrite --app-bundle-id=com.tally.app --prune=true --ignore='(^/dist|^/Gauge\\.app|^/test|^/\\.git|^/config\\.json|^/usage\\.jsonl)' && (cp assets/icon.icns dist/Gauge-darwin-x64/Gauge.app/Contents/Resources/electron.icns 2>/dev/null || true)",
     "build:mac:arm64": "electron-packager . 'Gauge' --platform=darwin --arch=arm64 --out=dist --icon=assets/icon.icns --overwrite --app-bundle-id=com.tally.app --prune=true --ignore='(^/dist|^/Gauge\\.app|^/test|^/\\.git|^/config\\.json|^/usage\\.jsonl)' && (cp assets/icon.icns dist/Gauge-darwin-arm64/Gauge.app/Contents/Resources/electron.icns 2>/dev/null || true)",
-    "build:dmg": "npm run build:mac && hdiutil create -volname 'Gauge' -srcfolder dist/Gauge-darwin-x64/Gauge.app -ov -format UDZO dist/Gauge-Intel-x64.dmg"
+    "build:dmg": "npm run build:mac && hdiutil create -volname 'Gauge' -srcfolder dist/Gauge-darwin-x64/Gauge.app -ov -format UDZO dist/Gauge-Intel-x64.dmg",
+    "build:dmg:arm64": "npm run build:mac:arm64 && hdiutil create -volname 'Gauge' -srcfolder dist/Gauge-darwin-arm64/Gauge.app -ov -format UDZO dist/Gauge-arm64.dmg"
   },
   "keywords": [
     "gauge",
