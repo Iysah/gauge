@@ -1,12 +1,10 @@
 # Gauge
 
-> Formerly *Tally*. Same engine, new name, Claude-inspired look, light/dark themes, and a show/hide toggle on the password field.
-
 Gauge is a native macOS data monitor and bandwidth analytics desktop application for 5G and broadband routers. It connects directly to your router to track live speeds, monthly quotas, per-device consumption, and historical usage patterns in real time from your macOS desktop and menu bar.
 
 This repository implements the native desktop app foundation using **Electron + Node.js + Vanilla CSS Tokens + macOS Keychain (`safeStorage`)**.
 
-<img width="1024" alt="Gauge macOS App Dashboard" src="assets/tally-dashboard.png" />
+<img width="1024" alt="Gauge macOS App Dashboard" src="assets/image.png" />
 
 ## Airtel 5G CPE (Huawei) support
 
