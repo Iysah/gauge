@@ -4,7 +4,7 @@ Gauge is a native macOS data monitor and bandwidth analytics desktop application
 
 This repository implements the native desktop app foundation using **Electron + Node.js + Vanilla CSS Tokens + macOS Keychain (`safeStorage`)**.
 
-<img width="1024" alt="Gauge macOS App Dashboard" src="assets/tally-dashboard.png" />
+<img width="1024" alt="Gauge macOS App Dashboard" src="assets/image.png" />
 
 ## Airtel 5G CPE (Huawei) support
 
