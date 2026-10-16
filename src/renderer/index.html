@@ -47,13 +47,13 @@
             <header>
               <img src="../../assets/tally-logo.png" alt="Tally" class="connect-logo-img">
               <b>Connect to your 5G router</b>
-              <small id="routerModelName">ZLT X17U</small>
+              <small id="routerModelName">Airtel 5G CPE (Huawei) or ZLT X17U</small>
             </header>
             <form id="cform">
               <label for="cRouterIp">Router address</label>
-              <input type="text" id="cRouterIp" value="192.168.0.1" required>
+              <input type="text" id="cRouterIp" value="192.168.118.1" required>
               <label for="cRouterPass">Router password</label>
-              <input type="password" id="cRouterPass" placeholder="Password" value="admin" required>
+              <input type="password" id="cRouterPass" placeholder="Outdoor unit admin password" required>
               <label class="chk">
                 <input type="checkbox" id="cSaveKey" checked> Save password in Keychain
               </label>
@@ -235,7 +235,7 @@
             <div class="status-rows">
               <div class="status-row">
                 <span class="status-lbl">Router model</span>
-                <strong id="connRouterModel">5G Router (ZLT X17U)</strong>
+                <strong id="connRouterModel">5G Router</strong>
               </div>
               <div class="status-row">
                 <span class="status-lbl">Network</span>
@@ -244,7 +244,7 @@
               <div class="status-row">
                 <div class="status-row-top">
                   <span class="status-lbl">Signal strength</span>
-                  <strong id="connSignalText">Good · -46 dBm</strong>
+                  <strong id="connSignalText">—</strong>
                 </div>
                 <div class="status-track">
                   <div class="status-fill" id="connSignalFill" style="width:75%"></div>
@@ -308,9 +308,9 @@
         <div class="row">
           <div>
             <b>Router address</b>
-            <p>Usually 192.168.0.1</p>
+            <p>Airtel 5G CPE: 192.168.118.1 · ZLT: 192.168.0.1</p>
           </div>
-          <input type="text" id="sRouterHost" value="192.168.0.1" aria-label="Router address">
+          <input type="text" id="sRouterHost" value="192.168.118.1" aria-label="Router address">
         </div>
         <div class="row">
           <div>

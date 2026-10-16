@@ -1,7 +1,7 @@
 import fs from "node:fs";
 import path from "node:path";
 import { EventEmitter } from "node:events";
-import { createRouter } from "./router.js";
+import { createRouterFor } from "./routers.js";
 import { measureThisComputer } from "./local.js";
 import { isEncryptionAvailable, encryptString, decryptString } from "./vault.js";
 
@@ -38,9 +38,10 @@ export class DataEngine extends EventEmitter {
 
   loadConfig() {
     const defaults = {
-      routerHost: "192.168.0.1",
+      routerHost: "192.168.118.1",
+      routerType: "auto", // "auto" | "huawei" | "zlt"
       username: "admin",
-      planGb: 350,
+      planGb: 0, // 0 = unlimited plan (Airtel ODU plans are unlimited)
       warnPercent: 80,
       dailyLimitGb: 15,
       notifyNewDevice: true,
@@ -132,11 +133,28 @@ export class DataEngine extends EventEmitter {
   }
 
   initRouter() {
-    this.router = createRouter({
-      host: this.config.routerHost || "192.168.0.1",
-      user: this.config.username || "admin",
-      pass: this.password || "admin",
-    });
+    this.router = createRouterFor(
+      {
+        host: this.config.routerHost || "192.168.118.1",
+        user: this.config.username || "admin",
+        pass: this.password || "admin",
+        type: this.config.routerType || "auto",
+      },
+      { onDetected: (kind) => this.rememberRouterType(kind) }
+    );
+  }
+
+  // Persist the auto-detected router type without rebuilding the live client.
+  rememberRouterType(kind) {
+    if (!kind || this.config.routerType === kind) return;
+    this.config.routerType = kind;
+    try {
+      const onDisk = fs.existsSync(this.configFile) ? JSON.parse(fs.readFileSync(this.configFile, "utf8")) : {};
+      onDisk.routerType = kind;
+      fs.writeFileSync(this.configFile, JSON.stringify(onDisk, null, 2));
+    } catch (err) {
+      console.warn("Could not save detected router type:", err.message);
+    }
   }
 
   pad(n) {
@@ -166,6 +184,7 @@ export class DataEngine extends EventEmitter {
       ku: rec.speed_kbps?.up,
       lrx: rec.local?.rx ?? null,
       ltx: rec.local?.tx ?? null,
+      dt: rec.day_mb?.total ?? null, // router's own "used today" counter (Huawei)
     });
 
     while (this.samples.length && this.samples[0].t < Date.now() - this.KEEP) {
@@ -208,10 +227,11 @@ export class DataEngine extends EventEmitter {
   }
 
   async testConnection(credentials) {
-    const testR = createRouter({
+    const testR = createRouterFor({
       host: credentials.host || this.config.routerHost,
       user: credentials.user || this.config.username,
-      pass: credentials.pass || this.config.password,
+      pass: credentials.pass || this.password,
+      type: credentials.type || this.config.routerType || "auto",
     });
     return await testR.probe();
   }
@@ -303,7 +323,7 @@ export class DataEngine extends EventEmitter {
 
       if (wasConnected) {
         this.emit("router-offline", {
-          host: this.config.routerHost || "192.168.0.1",
+          host: this.config.routerHost || "192.168.118.1",
           error: err.message || "Router became unreachable",
         });
       }
@@ -399,6 +419,22 @@ export class DataEngine extends EventEmitter {
 
     const td = days.get(this.dayKey(now)) || {},
       mk = this.dayKey(now).slice(0, 7);
+
+    // Huawei routers keep their own "used today" counter, which also covers time the
+    // app wasn't running. Prefer it when it's larger than what we measured ourselves,
+    // splitting it into down/up with the measured (or monthly) ratio.
+    let todayUse = { down: td.down || 0, up: td.up || 0 };
+    const lastSample = this.samples.at(-1);
+    if (lastSample?.dt != null && this.dayKey(lastSample.t) === this.dayKey(now)) {
+      const measuredToday = todayUse.down + todayUse.up;
+      if (lastSample.dt > measuredToday) {
+        const monthSum = (lastSample.down || 0) + (lastSample.up || 0);
+        const ratio = measuredToday > 0 ? todayUse.down / measuredToday : monthSum > 0 ? lastSample.down / monthSum : 0.9;
+        todayUse = { down: lastSample.dt * ratio, up: lastSample.dt * (1 - ratio) };
+        const todayEntry = dayList.find((e) => e.date === this.dayKey(now));
+        if (todayEntry) Object.assign(todayEntry, { source: "router", partial: false, ...todayUse });
+      }
+    }
     const sum = (f) =>
       [...days].filter(([k]) => k.startsWith(mk)).reduce((s, [, d]) => s + (d[f] || 0), 0);
     const since = this.samples.find((s) => this.dayKey(s.t).startsWith(mk))?.t;
@@ -416,7 +452,7 @@ export class DataEngine extends EventEmitter {
         }
       : null;
 
-    const totalTodayMeasured = (td.down || 0) + (td.up || 0);
+    const totalTodayMeasured = todayUse.down + todayUse.up;
     const totalMonthMeasured = sum("down") + sum("up");
 
     const thisMacTodayTotal = thisMacData ? thisMacData.today.down + thisMacData.today.up : 0;
@@ -513,6 +549,7 @@ export class DataEngine extends EventEmitter {
       lastError: this.lastError,
       config: {
         routerHost: this.config.routerHost,
+        routerType: this.config.routerType || "auto",
         planGb: this.config.planGb,
         warnPercent: this.config.warnPercent,
         dailyLimitGb: this.config.dailyLimitGb ?? 15,
@@ -529,6 +566,8 @@ export class DataEngine extends EventEmitter {
       ageSeconds: last ? Math.round((now - last.t) / 1000) : null,
       month: last ? { down: last.down, up: last.up, total: last.total } : null,
       speed: this.latest?.speed_kbps ?? null,
+      routerModel: this.latest?.model ?? null,
+      billing: this.latest?.billing ?? null,
       cellular: this.latest?.cellular ?? {
         networkType: "5G (NSA)",
         operator: "Cellular",
@@ -544,7 +583,7 @@ export class DataEngine extends EventEmitter {
         dayOfMonth,
       },
       measured: {
-        today: { down: td.down || 0, up: td.up || 0 },
+        today: todayUse,
         month: { down: monthWanDown, up: monthWanUp, total: monthWanTotal },
         since: since ? new Date(since).toISOString() : null,
       },

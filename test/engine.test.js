@@ -12,7 +12,7 @@ test("DataEngine: basic lifecycle, device nicknames, and router lockout halt", a
     const engine = new DataEngine(tmpDir);
 
     // 1. Verify default configurations
-    assert.equal(engine.config.routerHost, "192.168.0.1");
+    assert.equal(engine.config.routerHost, "192.168.118.1");
     assert.equal(engine.config.dailyLimitGb, 15);
     assert.equal(engine.config.notifyNewDevice, true);
     assert.equal(engine.config.notifyOffline, true);

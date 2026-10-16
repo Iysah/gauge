@@ -38,6 +38,8 @@ const server = http.createServer(async (req, res) => {
       res.writeHead(500, { "Content-Type": "application/json" });
       return res.end(JSON.stringify({ error: err.message, summary: engine.getSummary() }));
     }
+  }
+
   if (urlPath === "/api/disconnect" && req.method === "POST") {
     engine.disconnect();
     res.writeHead(200, { "Content-Type": "application/json" });

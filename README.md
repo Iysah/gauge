@@ -6,6 +6,27 @@ This repository implements the native desktop app foundation using **Electron + 
 
 <img width="1024" alt="Tally macOS App Dashboard" src="assets/tally-dashboard.png" />
 
+## Airtel 5G CPE (Huawei) support
+
+This fork adds support for the **Airtel Nigeria 5G Smart Connect ODU** sold as the *5G CPE Max 6* (Huawei H362-383, made by Zowee), alongside the original ZLT X17U.
+
+- **Router address:** `192.168.118.1` (the outdoor unit). The Wi-Fi router indoors (e.g. Huawei AX3S at `192.168.3.1`) has a different password — use the **outdoor unit's** admin password.
+- **Auto-detection:** `routerType` defaults to `"auto"`; Tally checks whether the address speaks the Huawei HiLink API and remembers the answer. Force it with `"routerType": "huawei"` or `"zlt"` in `config.json`.
+- **What it reads:** monthly down/up (`monitoring/month_statistics`), the router's own *used today* counter, live speed and lifetime totals (`monitoring/traffic-statistics`), 4G/5G signal with RSRP and SINR (`device/signal`), network type and operator, and the device list from the outdoor unit's LAN.
+- **Monthly reset:** the router resets its monthly counter on its *Start day* (default the 1st). Change it in the router's web UI so Tally's month matches your Airtel renewal date.
+- **Devices:** the outdoor unit only sees your indoor Wi-Fi router, so per-phone/laptop lists need a separate adapter for the indoor router (not built yet).
+- **Units:** Tally shows GiB by default (`"gbBase": 1024`). Set `"gbBase": 1000` if you want figures closer to decimal GB.
+
+Check the connection from the terminal before opening the app:
+
+```
+npm install
+npm run check            # asks for the outdoor unit password once, then prints usage and signal
+npm start
+```
+
+The Huawei login mirrors the open-source [huawei-lte-api](https://github.com/Salamek/huawei-lte-api) library. Like the ZLT client, it stops after one rejected login so the router doesn't lock you out.
+
 ---
 
 ## Key Features
@@ -33,7 +54,7 @@ This repository implements the native desktop app foundation using **Electron + 
 
 - **Operating System**: macOS 11.0 (Big Sur) or newer
 - **Runtime**: [Node.js](https://nodejs.org) (v18 or v20 LTS recommended)
-- **Supported Hardware**: 5G CPE / Broadband routers with web administrative interfaces (e.g., ZLT X17U series, ZTE, and compatible firmware)
+- **Supported Hardware**: ZLT X17U, and Huawei HiLink 5G CPEs such as the Airtel 5G CPE Max 6 (H362-383)
 
 ---
 

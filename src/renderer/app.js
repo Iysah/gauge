@@ -845,13 +845,31 @@
     }
 
     // Router Connection Card
-    if ($("connRouterModel")) $("connRouterModel").textContent = d.routerModel ? `${d.routerModel}` : "5G Router (ZLT X17U)";
-    if ($("connNetworkType")) $("connNetworkType").textContent = `${d.cellular?.networkType || "5G (NSA)"}`;
+    if ($("connRouterModel")) $("connRouterModel").textContent = d.routerModel || "5G Router";
+    if ($("connNetworkType")) {
+      const op = d.cellular?.operator && d.cellular.operator !== "Cellular" ? ` · ${d.cellular.operator}` : "";
+      $("connNetworkType").textContent = `${d.cellular?.networkType || "5G (NSA)"}${op}`;
+    }
     const rssi = d.cellular?.rssi;
-    if ($("connSignalText")) $("connSignalText").textContent = rssi ? `Good · ${rssi} dBm` : "Connected · 5G";
+    const sinr = d.cellular?.sinr;
+    if ($("connSignalText")) {
+      if (rssi != null) {
+        const quality = d.cellular?.quality || "Good";
+        const sinrText = sinr != null ? ` · SINR ${sinr} dB` : "";
+        $("connSignalText").textContent = `${quality} · ${rssi} dBm${sinrText}`;
+      } else {
+        $("connSignalText").textContent = "Connected · 5G";
+      }
+    }
     if ($("connSignalFill")) {
-      const sigPct = rssi ? Math.max(10, Math.min(100, Math.round(((rssi + 110) / 60) * 100))) : 80;
+      // With SINR available, quality drives the bar (it decides real-world speed);
+      // otherwise fall back to signal strength.
+      let sigPct = 80;
+      if (sinr != null) sigPct = Math.round(((Math.min(Math.max(sinr, -5), 25) + 5) / 30) * 100);
+      else if (rssi != null) sigPct = Math.round(((rssi + 110) / 60) * 100);
+      sigPct = Math.max(10, Math.min(100, sigPct));
       $("connSignalFill").style.width = `${sigPct}%`;
+      $("connSignalFill").classList.toggle("poor", d.cellular?.quality === "Poor");
     }
     if ($("connLocalIp")) $("connLocalIp").textContent = `${d.thisComputer?.ip || "192.168.0.114"} (this Mac)`;
     if ($("connLastSync")) $("connLastSync").textContent = "Just now";
@@ -864,7 +882,7 @@
     renderDevices(d.devices || [], d.thisComputer, d.otherDevices, d.measured);
 
     // Update settings inputs if not focused
-    if (document.activeElement !== $("sRouterHost")) $("sRouterHost").value = d.config?.routerHost || "192.168.0.1";
+    if (document.activeElement !== $("sRouterHost")) $("sRouterHost").value = d.config?.routerHost || "192.168.118.1";
     if (document.activeElement !== $("sPlanGb")) $("sPlanGb").value = d.config?.planGb ? `${d.config.planGb} GB` : "";
     if (document.activeElement !== $("sDailyLimitGb")) $("sDailyLimitGb").value = d.config?.dailyLimitGb ? `${d.config.dailyLimitGb} GB` : "15 GB";
     if (document.activeElement !== $("sWarnPercent")) $("sWarnPercent").value = String(d.config?.warnPercent || 80);

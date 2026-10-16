@@ -1084,6 +1084,10 @@ h3 {
   transition: width 0.4s ease;
 }
 
+.status-fill.poor {
+  background: var(--bad);
+}
+
 .chart {
   display: flex;
   align-items: flex-end;

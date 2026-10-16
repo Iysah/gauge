@@ -1,7 +1,8 @@
 {
-  "routerHost": "192.168.0.1",
+  "routerHost": "192.168.118.1",
+  "routerType": "auto",
   "username": "admin",
-  "planGb": 350,
+  "planGb": 0,
   "warnPercent": 80,
   "dailyLimitGb": 15,
   "notifyNewDevice": true,
