@@ -1,7 +1,7 @@
 :root {
-  --lime: #D4F070;
-  --ink: #171713;
-  --olive: #55622B;
+  --lime: #D97757;
+  --ink: #141413;
+  --olive: #B5573A;
   --off-white: #F4F3EE;
 
   --font-heading: "Space Grotesk", -apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif;
@@ -13,12 +13,12 @@
   --card: #ffffff;
   --mute: #6f6e66;
   --line: #dedcd5;
-  --yel: #D4F070;
+  --yel: #D97757;
   --yel-ink: #171713;
   --dl: #171713;
   --ul: #3d82d6;
   --grey: #b5b4ac;
-  --ok: #2fa866;
+  --ok: #788c5d;
   --bad: #d64545;
   box-sizing: border-box;
 }
@@ -32,10 +32,10 @@
     --ink: #f2f1eb;
     --mute: #99988e;
     --line: #2e2e26;
-    --dl: #D4F070;
+    --dl: #E8A07F;
     --grey: #55554c;
     --yel-ink: #171713;
-    --olive: #55622B;
+    --olive: #B5573A;
   }
 }
 
@@ -47,10 +47,10 @@
   --ink: #f2f1eb;
   --mute: #99988e;
   --line: #2e2e26;
-  --dl: #D4F070;
+  --dl: #E8A07F;
   --grey: #55554c;
   --yel-ink: #171713;
-  --olive: #55622B;
+  --olive: #B5573A;
 }
 
 * {
@@ -332,8 +332,10 @@ h3 {
 
 /* Connect / Login screen */
 #connect {
-  background: var(--lime);
-  color: #171713;
+  background:
+    radial-gradient(900px 420px at 50% -10%, rgba(217, 119, 87, 0.16), transparent 70%),
+    var(--win);
+  color: var(--ink);
   height: 100vh;
   position: relative;
   overflow: hidden;
@@ -357,37 +359,34 @@ h3 {
 }
 
 .ccard {
-  background: #ffffff;
-  color: #171713;
-  width: 350px;
-  border-radius: 26px;
-  overflow: hidden;
-  box-shadow: 0 20px 50px rgba(25, 35, 10, 0.28);
+  background: var(--card);
+  color: var(--ink);
+  width: 380px;
+  max-width: 100%;
+  border-radius: 20px;
+  border: 1px solid var(--line);
+  box-shadow: 0 1px 2px rgba(20, 20, 19, 0.05), 0 18px 40px -12px rgba(20, 20, 19, 0.18);
   -webkit-app-region: no-drag;
 }
 
 .ccard header {
-  background: var(--lime);
-  padding: 26px 24px 30px;
-  text-align: center;
-  border-radius: 0 0 50% 50% / 0 0 34px 34px;
+  padding: 30px 32px 4px;
+  text-align: left;
 }
 
-.connect-logo-img {
-  width: 58px;
-  height: 58px;
-  border-radius: 14px;
-  margin-bottom: 12px;
-  display: inline-block;
-  box-shadow: 0 4px 16px rgba(25, 35, 10, 0.15);
-  object-fit: cover;
+.connect-logo {
+  width: 44px;
+  height: 44px;
+  display: block;
+  margin-bottom: 18px;
 }
 
 .ccard header b {
   display: block;
-  font-size: 20px;
+  font-size: 22px;
   line-height: 1.2;
-  color: #171713 !important;
+  letter-spacing: -0.02em;
+  color: var(--ink);
   font-family: var(--font-heading);
   font-weight: 700;
 }
@@ -395,39 +394,59 @@ h3 {
 .ccard header small {
   display: block;
   margin-top: 6px;
-  color: var(--olive) !important;
-  font-weight: 700;
+  color: var(--mute);
+  font-weight: 400;
   font-size: 13px;
-  letter-spacing: 0.02em;
 }
 
 .ccard form {
-  padding: 22px 28px 28px;
+  padding: 22px 32px 30px;
   display: grid;
-  gap: 10px;
+  gap: 8px;
 }
 
-.ccard label {
+.ccard label:not(.chk) {
   font-size: 12px;
-  color: #6b6759;
-  font-weight: 500;
+  color: var(--mute);
+  font-weight: 600;
+  margin-top: 6px;
 }
 
 .ccard input[type="text"],
 .ccard input[type="password"] {
   width: 100%;
-  padding: 11px 16px;
-  border-radius: 999px;
-  border: 2px solid #d4e897;
+  padding: 11px 14px;
+  border-radius: 10px;
+  border: 1px solid var(--line);
   font: inherit;
-  background: #fff;
-  color: #171713;
+  background: var(--win);
+  color: var(--ink);
   outline: none;
-  transition: border-color 0.2s;
+  transition: border-color 0.15s, box-shadow 0.15s;
 }
 
-.ccard input:focus {
-  border-color: #171713;
+.ccard input::placeholder {
+  color: var(--mute);
+  opacity: 0.7;
+}
+
+.ccard input[type="text"]:focus,
+.ccard input[type="password"]:focus {
+  border-color: var(--lime);
+  box-shadow: 0 0 0 3px rgba(217, 119, 87, 0.22);
+}
+
+.ccard .btn {
+  margin-top: 8px;
+  padding: 12px 20px;
+  border-radius: 10px;
+  color: #ffffff !important;
+  font-size: 14px;
+  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.2) inset;
+}
+
+.ccard .btn:hover:not(:disabled) {
+  background: #C6613F !important;
 }
 
 .chk {
@@ -435,25 +454,34 @@ h3 {
   gap: 8px;
   align-items: center;
   font-size: 12px;
-  color: #6b6759;
+  color: var(--mute);
   cursor: pointer;
+  margin-top: 4px;
+}
+
+.chk input {
+  accent-color: var(--lime);
+  margin: 0;
 }
 
 .err {
   color: var(--bad);
   font-size: 12px;
   min-height: 16px;
-  text-align: center;
+  text-align: left;
   line-height: 1.35;
   word-break: break-word;
 }
 
+.err:empty {
+  display: none;
+}
+
 .cfoot {
-  margin-top: 14px;
+  margin-top: 16px;
   text-align: center;
   font-size: 12px;
-  opacity: 0.85;
-  color: #171713;
+  color: var(--mute);
 }
 
 /* Dashboard screen */
@@ -598,7 +626,7 @@ h3 {
 
 .hero-lbl {
   font-size: 12px;
-  color: #3d4a2b !important;
+  color: rgba(20, 20, 19, 0.82) !important;
   font-weight: 700;
   margin-bottom: 5px;
   letter-spacing: -0.01em;
@@ -623,14 +651,14 @@ h3 {
 .hero-caption {
   margin-top: 6px;
   font-size: 11.5px;
-  color: #3d4a2b !important;
+  color: rgba(20, 20, 19, 0.82) !important;
   font-weight: 500;
 }
 
 .split {
   height: 8px;
   border-radius: 20px;
-  background: var(--ul);
+  background: #F4F3EE;
   overflow: hidden;
   margin: 16px 0 10px;
   max-width: 440px;
@@ -652,7 +680,7 @@ h3 {
   gap: 18px;
   font-size: 11.5px;
   font-weight: 600;
-  color: #38432b !important;
+  color: rgba(20, 20, 19, 0.82) !important;
 }
 
 .legend-dot {
@@ -692,7 +720,7 @@ h3 {
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.8px;
-  color: #3d4a2b !important;
+  color: rgba(20, 20, 19, 0.82) !important;
   font-family: var(--font-heading);
 }
 
@@ -723,7 +751,7 @@ h3 {
   justify-content: space-between;
   align-items: center;
   font-size: 11px;
-  color: #3d4a2b !important;
+  color: rgba(20, 20, 19, 0.82) !important;
   font-weight: 600;
 }
 
@@ -753,7 +781,7 @@ h3 {
 }
 
 .metric:hover {
-  border-color: rgba(212, 240, 112, 0.4);
+  border-color: rgba(217, 119, 87, 0.4);
 }
 
 .metric-top {
@@ -1245,7 +1273,7 @@ tr.row-other-devices td:last-child {
 
 /* Distinct Grand Total Row for All Devices Combined */
 tr.row-total-devices td {
-  background: rgba(212, 240, 112, 0.09);
+  background: rgba(217, 119, 87, 0.09);
   border-top: 1.5px solid var(--line);
   border-bottom: none;
   padding-top: 12px;
@@ -1818,3 +1846,16 @@ tr.row-total-devices td:last-child {
   align-items: center;
   gap: 8px;
 }
+
+/* Password field with show/hide toggle */
+.pw { position: relative; }
+.pw input { padding-right: 44px !important; }
+.pw-eye {
+  position: absolute; right: 6px; top: 50%; transform: translateY(-50%);
+  width: 30px; height: 30px; display: grid; place-items: center;
+  border: 0; border-radius: 50%; background: transparent; color: var(--mute); cursor: pointer;
+}
+.pw-eye:hover { color: #B5573A; background: rgba(217, 119, 87, 0.12); }
+.pw-eye .eye-off { display: none; }
+.pw-eye[aria-pressed="true"] .eye-on { display: none; }
+.pw-eye[aria-pressed="true"] .eye-off { display: block; }

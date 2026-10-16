@@ -1,20 +1,20 @@
 {
-  "name": "tally",
-  "productName": "Tally",
+  "name": "gauge",
+  "productName": "Gauge",
   "version": "2.0.0",
-  "description": "Tally: Mac application for tracking 5G router data usage and connected devices.",
+  "description": "Gauge: Mac application for tracking 5G router data usage and connected devices.",
   "main": "src/main.js",
   "type": "module",
   "scripts": {
     "check": "node scripts/check-router.mjs",
     "start": "electron .",
     "test": "node --test test/**/*.test.js",
-    "build:mac": "electron-packager . 'Tally' --platform=darwin --arch=x64 --out=dist --icon=assets/icon.icns --overwrite --app-bundle-id=com.tally.app --prune=true --ignore='(^/dist|^/Tally\\.app|^/test|^/\\.git|^/config\\.json|^/usage\\.jsonl)' && (cp assets/icon.icns dist/Tally-darwin-x64/Tally.app/Contents/Resources/electron.icns 2>/dev/null || true)",
-    "build:mac:arm64": "electron-packager . 'Tally' --platform=darwin --arch=arm64 --out=dist --icon=assets/icon.icns --overwrite --app-bundle-id=com.tally.app --prune=true --ignore='(^/dist|^/Tally\\.app|^/test|^/\\.git|^/config\\.json|^/usage\\.jsonl)' && (cp assets/icon.icns dist/Tally-darwin-arm64/Tally.app/Contents/Resources/electron.icns 2>/dev/null || true)",
-    "build:dmg": "npm run build:mac && hdiutil create -volname 'Tally' -srcfolder dist/Tally-darwin-x64/Tally.app -ov -format UDZO dist/Tally-Intel-x64.dmg"
+    "build:mac": "electron-packager . 'Gauge' --platform=darwin --arch=x64 --out=dist --icon=assets/icon.icns --overwrite --app-bundle-id=com.tally.app --prune=true --ignore='(^/dist|^/Gauge\\.app|^/test|^/\\.git|^/config\\.json|^/usage\\.jsonl)' && (cp assets/icon.icns dist/Gauge-darwin-x64/Gauge.app/Contents/Resources/electron.icns 2>/dev/null || true)",
+    "build:mac:arm64": "electron-packager . 'Gauge' --platform=darwin --arch=arm64 --out=dist --icon=assets/icon.icns --overwrite --app-bundle-id=com.tally.app --prune=true --ignore='(^/dist|^/Gauge\\.app|^/test|^/\\.git|^/config\\.json|^/usage\\.jsonl)' && (cp assets/icon.icns dist/Gauge-darwin-arm64/Gauge.app/Contents/Resources/electron.icns 2>/dev/null || true)",
+    "build:dmg": "npm run build:mac && hdiutil create -volname 'Gauge' -srcfolder dist/Gauge-darwin-x64/Gauge.app -ov -format UDZO dist/Gauge-Intel-x64.dmg"
   },
   "keywords": [
-    "tally",
+    "gauge",
     "5g",
     "router",
     "data-monitor",

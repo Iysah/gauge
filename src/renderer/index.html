@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Tally</title>
+<title>Gauge</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
@@ -16,8 +16,8 @@
     <!-- Transparent drag spacer for macOS native traffic lights -->
     <div class="lights-spacer" aria-hidden="true"></div>
     <div class="side-brand">
-      <img src="../../assets/tally-logo.png" alt="Tally" class="side-brand-icon">
-      <span class="side-brand-title">Tally</span>
+      <img src="../../assets/tally-logo.png" alt="Gauge" class="side-brand-icon">
+      <span class="side-brand-title">Gauge</span>
     </div>
     <button data-go="dash" aria-current="true">
       <svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 3v18h18"/><path d="M8 17v-5"/><path d="M13 17V8"/><path d="M18 17v-9"/></svg>Usage
@@ -45,7 +45,7 @@
         <div>
           <div class="ccard">
             <header>
-              <img src="../../assets/tally-logo.png" alt="Tally" class="connect-logo-img">
+              <svg class="connect-logo" viewBox="0 0 44 44" role="img" aria-label="Gauge"><rect width="44" height="44" rx="11" fill="#141413"/><path d="M31 12 14 20.5l7 2.5 2.5 8z" fill="#D97757" stroke="#D97757" stroke-width="3" stroke-linejoin="round"/></svg>
               <b>Connect to your 5G router</b>
               <small id="routerModelName">Airtel 5G CPE (Huawei) or ZLT X17U</small>
             </header>
@@ -53,7 +53,13 @@
               <label for="cRouterIp">Router address</label>
               <input type="text" id="cRouterIp" value="192.168.118.1" required>
               <label for="cRouterPass">Router password</label>
-              <input type="password" id="cRouterPass" placeholder="Outdoor unit admin password" required>
+              <div class="pw">
+                <input type="password" id="cRouterPass" placeholder="Outdoor unit admin password" autocomplete="current-password" required>
+                <button type="button" class="pw-eye" id="btnTogglePw" aria-label="Show password" aria-pressed="false">
+                  <svg class="eye-on" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7S1 12 1 12z"/><circle cx="12" cy="12" r="3"/></svg>
+                  <svg class="eye-off" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.94 17.94A10.9 10.9 0 0 1 12 19c-7 0-11-7-11-7a19.8 19.8 0 0 1 5.06-5.94M9.9 4.24A10.7 10.7 0 0 1 12 4c7 0 11 7 11 7a19.9 19.9 0 0 1-3.17 4.19M1 1l22 22"/></svg>
+                </button>
+              </div>
               <label class="chk">
                 <input type="checkbox" id="cSaveKey" checked> Save password in Keychain
               </label>
@@ -95,7 +101,7 @@
             <div class="split"><i id="splitBar" style="width:50%"></i></div>
             <div class="leg">
               <span><i class="legend-dot" style="background:#171713"></i>Download <b id="legDown">0 GB</b></span>
-              <span><i class="legend-dot" style="background:#5b8def"></i>Upload <b id="legUp">0 GB</b></span>
+              <span><i class="legend-dot" style="background:#F4F3EE; box-shadow: inset 0 0 0 1px rgba(20,20,19,.25)"></i>Upload <b id="legUp">0 GB</b></span>
             </div>
           </div>
           <div class="hero-plan" id="planBox">
@@ -161,8 +167,8 @@
               <svg class="line-chart-svg" id="lineChartSvg" viewBox="0 0 620 220" preserveAspectRatio="none">
                 <defs>
                   <linearGradient id="limeAreaGrad" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="0%" stop-color="#D4F070" stop-opacity="0.5" />
-                    <stop offset="100%" stop-color="#D4F070" stop-opacity="0.08" />
+                    <stop offset="0%" stop-color="#D97757" stop-opacity="0.5" />
+                    <stop offset="100%" stop-color="#D97757" stop-opacity="0.08" />
                   </linearGradient>
                 </defs>
               </svg>
@@ -389,7 +395,7 @@
           <b>Trust &amp; Security:</b>
           <p style="margin:6px 0 0;line-height:1.6">
             • <b>macOS Keychain:</b> Router passwords are encrypted via Electron’s safeStorage directly in your macOS Keychain and never stored in plain text.<br>
-            • <b>Lockout Protection:</b> The router firmware locks logins for several minutes after 3 consecutive wrong passwords. Tally automatically stops polling upon a single rejected login to keep your router accessible.
+            • <b>Lockout Protection:</b> The router firmware locks logins for several minutes after 3 consecutive wrong passwords. Gauge automatically stops polling upon a single rejected login to keep your router accessible.
           </p>
         </div>
       </div>

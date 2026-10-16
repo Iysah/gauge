@@ -291,8 +291,8 @@
     svg.innerHTML = `
       <defs>
         <linearGradient id="limeAreaGrad" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%" stop-color="#D4F070" stop-opacity="0.5" />
-          <stop offset="100%" stop-color="#D4F070" stop-opacity="0.08" />
+          <stop offset="0%" stop-color="#D97757" stop-opacity="0.5" />
+          <stop offset="100%" stop-color="#D97757" stop-opacity="0.08" />
         </linearGradient>
       </defs>
       ${gridSvg}
@@ -364,7 +364,7 @@
   }
 
   // All-Time & Monthly Pie / Donut Chart Renderer
-  const MONTH_COLORS = ["#D4F070", "#3d82d6", "#55622B", "#e08a5a", "#7a6bd6", "#2fa866", "#d64545", "#f5c842"];
+  const MONTH_COLORS = ["#D97757", "#3d82d6", "#B5573A", "#e08a5a", "#7a6bd6", "#788c5d", "#d64545", "#f5c842"];
 
   function renderAllTimeView(allTime, gBase) {
     if (!allTime) return;
@@ -604,14 +604,14 @@
       <tr class="row-total-devices">
         <td>
           <div class="dev-cell">
-            <span class="dot" style="background:var(--lime);box-shadow:0 0 8px rgba(212,240,112,0.6)"></span>
+            <span class="dot" style="background:var(--lime);box-shadow:0 0 8px rgba(217, 119, 87,0.6)"></span>
             <div>
               <b>Total network usage</b>
               <small>All devices combined</small>
             </div>
           </div>
         </td>
-        <td><span class="tag" style="background:rgba(212,240,112,0.2);color:var(--ink);font-weight:700">Network Total</span></td>
+        <td><span class="tag" style="background:rgba(217, 119, 87,0.2);color:var(--ink);font-weight:700">Network Total</span></td>
         <td><b style="color:var(--lime);font-family:var(--font-heading);font-size:14px">${totalTodayStr}</b></td>
         <td><b style="color:var(--lime);font-family:var(--font-heading);font-size:14px">${totalMonthStr}</b></td>
       </tr>
@@ -1048,7 +1048,7 @@
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
     a.href = url;
-    a.download = "tally-monthly-history.csv";
+    a.download = "gauge-monthly-history.csv";
     a.click();
     URL.revokeObjectURL(url);
   });
@@ -1075,3 +1075,13 @@
     });
   }
 })();
+
+// Show/hide password toggle on the connect screen
+document.getElementById("btnTogglePw")?.addEventListener("click", (e) => {
+  const input = document.getElementById("cRouterPass");
+  const btn = e.currentTarget;
+  const show = input.type === "password";
+  input.type = show ? "text" : "password";
+  btn.setAttribute("aria-pressed", String(show));
+  btn.setAttribute("aria-label", show ? "Hide password" : "Show password");
+});

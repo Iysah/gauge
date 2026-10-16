@@ -15,7 +15,7 @@
 //
 // sample() returns the same record shape as the ZLT client in router.js, so the
 // engine, charts and menu bar work unchanged. Counters arrive in bytes and are
-// converted to MiB (Tally's "MB") and kilobits per second.
+// converted to MiB (Gauge's "MB") and kilobits per second.
 
 import http from "node:http";
 import https from "node:https";
@@ -124,7 +124,7 @@ export function signalQuality(sinr, rsrp, poorFlag) {
   return "Poor";
 }
 
-/** Turn raw endpoint replies into Tally's sample record. Exported for tests. */
+/** Turn raw endpoint replies into Gauge's sample record. Exported for tests. */
 export function buildRecord(r, now = new Date()) {
   const month = r.month || {};
   const traffic = r.traffic || {};

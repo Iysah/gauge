@@ -143,7 +143,7 @@ function listen(port, tries = 5) {
   server.listen(port, "127.0.0.1", () => {
     const activePort = server.address().port;
     fs.writeFileSync(path.join(ROOT_DIR, ".active_port"), String(activePort));
-    console.log(`Tally background engine running on http://127.0.0.1:${activePort}`);
+    console.log(`Gauge background engine running on http://127.0.0.1:${activePort}`);
   });
 }
 

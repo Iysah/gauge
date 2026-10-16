@@ -1,7 +1,7 @@
 // Picks the right router client for the configured host.
 //
 //   routerType "huawei" -> Huawei 5G CPE / HiLink API (Airtel 5G CPE Max 6, H362-383)
-//   routerType "zlt"    -> ZLT X17U JSON API (the original Tally router)
+//   routerType "zlt"    -> ZLT X17U JSON API (the original Gauge router)
 //   routerType "auto"   -> detect on first use, then stick with the answer
 //
 // Every client exposes the same { sample(), probe() } interface.

@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-// Quick terminal check that Tally can log in to your router and read its counters.
+// Quick terminal check that Gauge can log in to your router and read its counters.
 //   npm run check                 # uses 192.168.118.1
 //   npm run check -- 192.168.0.1  # another address
 // Logs in once only, so a typo can't lock you out.
@@ -42,7 +42,7 @@ try {
   Live speed    ${speed(r.speed_kbps?.down)} down / ${speed(r.speed_kbps?.up)} up
   Devices seen  ${(r.devices || []).map((d) => d.name).join(", ") || "none"}
 `);
-  console.log("Tally can read this router. Run `npm start` to open the app.");
+  console.log("Gauge can read this router. Run `npm start` to open the app.");
 } catch (e) {
   console.error(`\n${e.code === "LOGIN" ? "Login failed" : "Error"}: ${e.message}`);
   if (e.code === "LOGIN") console.error("Not retrying, so the router won't lock you out.");

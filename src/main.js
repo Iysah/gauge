@@ -62,7 +62,7 @@ function createMainWindow() {
     height: 680,
     minWidth: 840,
     minHeight: 580,
-    title: "Tally",
+    title: "Gauge",
     icon: iconPath,
     titleBarStyle: "hiddenInset",
     trafficLightPosition: { x: 16, y: 16 },
@@ -107,12 +107,12 @@ function updateTray(summary) {
   const onlineCount = (summary.devices || []).filter((d) => d.online).length;
 
   const contextMenu = Menu.buildFromTemplate([
-    { label: `Tally: ${gbText} this month`, enabled: false },
+    { label: `Gauge: ${gbText} this month`, enabled: false },
     { label: `Speed: ${spDown} ↓ / ${spUp} ↑`, enabled: false },
     { label: `Devices: ${onlineCount} online`, enabled: false },
     { type: "separator" },
     {
-      label: "Open Tally",
+      label: "Open Gauge",
       click: () => {
         if (mainWindow) {
           mainWindow.show();
@@ -132,7 +132,7 @@ function updateTray(summary) {
     },
     { type: "separator" },
     {
-      label: "Quit Tally",
+      label: "Quit Gauge",
       click: () => {
         isQuitting = true;
         app.quit();
@@ -140,7 +140,7 @@ function updateTray(summary) {
     },
   ]);
 
-  tray.setToolTip(`Tally: ${gbText} used`);
+  tray.setToolTip(`Gauge: ${gbText} used`);
   tray.setContextMenu(contextMenu);
 }
 
@@ -181,7 +181,7 @@ function checkThresholdAlert(summary) {
       notifiedThisMonth = currentMonthKey;
       if (Notification.isSupported()) {
         new Notification({
-          title: "Tally Monthly Usage Alert",
+          title: "Gauge Monthly Usage Alert",
           body: `You have reached ${currentPct.toFixed(0)}% of your ${summary.planGb} GB plan (${formatGb(summary.month.total, mbPerGb)} used).`,
           icon: path.join(app.getAppPath(), "assets", "icon.png"),
         }).show();
@@ -198,7 +198,7 @@ function checkThresholdAlert(summary) {
     lastNotifiedDay = todayKey;
     if (Notification.isSupported()) {
       new Notification({
-        title: "Tally Daily Usage Alert",
+        title: "Gauge Daily Usage Alert",
         body: `You have used ${todayGb.toFixed(1)} GB today, reaching your ${dailyLimitGb} GB daily threshold.`,
         icon: path.join(app.getAppPath(), "assets", "icon.png"),
       }).show();
@@ -332,7 +332,7 @@ if (!gotLock) {
     engine.on("login-lockout", (msg) => {
       if (Notification.isSupported()) {
         new Notification({
-          title: "Tally Login Paused",
+          title: "Gauge Login Paused",
           body: msg || "Polling paused to prevent router lockout. Please check password in Settings.",
           icon: path.join(app.getAppPath(), "assets", "icon.png"),
         }).show();
