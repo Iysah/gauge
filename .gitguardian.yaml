@@ -1,0 +1,7 @@
+version: 2
+
+# Test fixtures and unit tests contain made-up tokens, IMEI/IMSI values and
+# sample passwords (e.g. "S3cret!pw") used as reference vectors. None are real.
+secret:
+  ignored_paths:
+    - "test/**"
